@@ -1,0 +1,13 @@
+name: aiinfra
+
+topology:
+  nodes:
+    host1:
+      kind: linux
+      image: alpine:3
+    host2:
+      kind: linux
+      image: alpine:3
+
+  links:
+    - endpoints: ["host1:eth1", "host2:eth1"]
