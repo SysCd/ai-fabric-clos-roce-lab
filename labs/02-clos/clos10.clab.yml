@@ -1,0 +1,45 @@
+# Day 10: two spines, two leaves, and two hosts.
+# The addresses and ASNs below are a plan; this file does not configure them.
+# Planned ASNs: spine1 65001, spine2 65002, leaf1 65101, leaf2 65102.
+#
+# Planned point-to-point addresses:
+# spine1:eth1 10.0.11.2/30 <-> leaf1:eth1 10.0.11.1/30
+# spine1:eth2 10.0.21.2/30 <-> leaf2:eth1 10.0.21.1/30
+# spine2:eth1 10.0.12.2/30 <-> leaf1:eth2 10.0.12.1/30
+# spine2:eth2 10.0.22.2/30 <-> leaf2:eth2 10.0.22.1/30
+#
+# Planned host addresses:
+# leaf1:eth3 10.10.1.1/24 <-> host1:eth1 10.10.1.2/24
+# leaf2:eth3 10.10.2.1/24 <-> host2:eth1 10.10.2.2/24
+
+name: clos10
+
+topology:
+  kinds:
+    frr:
+      image: quay.io/frrouting/frr:containerlab-10.7.1
+      daemons: [bgpd]
+    linux:
+      image: alpine:3
+
+  nodes:
+    spine1:
+      kind: frr
+    spine2:
+      kind: frr
+    leaf1:
+      kind: frr
+    leaf2:
+      kind: frr
+    host1:
+      kind: linux
+    host2:
+      kind: linux
+
+  links:
+    - endpoints: ["spine1:eth1", "leaf1:eth1"]
+    - endpoints: ["spine1:eth2", "leaf2:eth1"]
+    - endpoints: ["spine2:eth1", "leaf1:eth2"]
+    - endpoints: ["spine2:eth2", "leaf2:eth2"]
+    - endpoints: ["leaf1:eth3", "host1:eth1"]
+    - endpoints: ["leaf2:eth3", "host2:eth1"]
